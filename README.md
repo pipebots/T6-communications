@@ -27,6 +27,7 @@ Follow these steps to run the system:
 
 Execute both the lora_node and lora_receiver_node.
 The LoPy4 attached to the Raspberry Pi will start receiving data on the serial port and send it to another LoPy4 connected to the PC.
+
 **Notes**
 Make sure that the appropriate COM port is configured in the code (e.g., ttyACM0). Adjust this value if necessary.
 Ensure that the ROS2 setup on the Raspberry Pi is properly configured.
