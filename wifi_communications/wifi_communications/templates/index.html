@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File List</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-qMz973a0vTg1LpnYYh1KUxpt9rC/2LCB+Qcv/MAUQmejBG+qZ8bJ1KW9HSLNQGajHaFf5ZXf8wAjRfl5dFm5zQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 20px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        .file-icon {
+            font-size: 24px;
+            margin-right: 10px;
+        }
+
+        .file-preview {
+            width: 100%;
+            max-width: 300px;
+        }
+    </style>
+</head>
+<body>
+    <h1>File List</h1>
+    <ul>
+        {% for file in files %}
+            <li>
+                {% if file.endswith('.png') or file.endswith('.jpg') %}
+                    <img class="file-preview" src="{{ url_for('download_file', filename=file) }}" alt="{{ file }}">
+                {% elif file.endswith('.mp4') %}
+                    <video class="file-preview" controls>
+                        <source src="{{ url_for('download_file', filename=file) }}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                {% else %}
+                    <i class="file-icon fas fa-file"></i>
+                    <a href="{{ url_for('download_file', filename=file) }}" download>{{ file }}</a>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
