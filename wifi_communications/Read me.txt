@@ -1,0 +1,30 @@
+file_publisher.py
+This Python code is a simple ROS publisher node written using the ROS2 Python client library, rclpy.The code creates a ROS2 node that publishes messages to two topics: 'folder_path_topic' and 'location_topic'. It creates a String message object and sets its data field to the folder path ('/home/pi/Documents/wifi_data').
+It publishes this message to the 'folder_path_topic'.
+
+my_wifi_communication_node.py
+ This code integrates ROS 2 with a Flask web server to create a simple web interface for interacting with data received from a ROS topic. The script creates a ROS 2 node that subscribes to a specific ROS topic (folder_path_topic). When a message is received, it logs the folder path, lists the files in that folder, and starts a Flask web server. The web server provides a simple interface to view the list of files and download them.
+
+index.html
+The HTML code represents a template for rendering a web page that displays a list of files. The template is intended to be used with a Flask web server, and it dynamically generates HTML content based on the files received from the ROS topic. 
+
+
+## Accessing the File List Web Page on Another Device
+
+To access the `index.html` page on another device, make sure both devices are on the same local wifi network. Follow these steps:
+
+1. Find the IP address of your Raspberry Pi:
+    - You can usually find this information by running `ifconfig` on your Raspberry Pi and looking for the IP address associated with the network interface (e.g., wlan0).
+
+2. Open a web browser on the other device and enter the following URL:
+    ```
+    http://ipaddressofpi:8000
+    ```
+    Replace "ipaddressofpi" with the actual IP address of your Raspberry Pi.
+
+3. Press Enter, and the web page will display the contents of the shared folder.
+
+Example:
+http://192.168.233.24:8000
+
+This information will help users access the web page served by your Flask application running on the Raspberry Pi from another device on the same local network.
