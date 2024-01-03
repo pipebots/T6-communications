@@ -2,11 +2,13 @@
 import rclpy
 from std_msgs.msg import String
 from rclpy.node import Node
-from flask import Flask, render_template, send_from_directory
+from flask import Flask, render_template, send_from_directory,redirect, url_for
 import os
 import subprocess
+from flask import request
 
-app = Flask(__name__, template_folder='/home/pi/ros2_ws/lora_communications/lora_communications/templates', static_folder='static')
+app = Flask(__name__, template_folder='/home/pi/ros2_ws/src/wifi_communications/wifi_communications/templates', static_folder='static')
+#app = Flask(__name__, template_folder='/home/pi/ros2_ws/lora_communications/lora_communications/templates', static_folder='static')
 
 class MyNode(Node):
     def __init__(self):
@@ -18,13 +20,15 @@ class MyNode(Node):
             self.folder_path_callback,
             qos_profile
         )
-        
-#         self.subscription_location = self.create_subscription(
-#             String,
-#             'location_topic',
-#             self.location_callback,
-#             qos_profile
-#         )
+        self.subscription_location = self.create_subscription(
+            String,
+            'location_topic',
+            self.location_callback,
+            qos_profile
+        )
+    def location_callback(self, msg):
+        location = msg.data
+        self.get_logger().info(f"Received location: {location}")
 
     def folder_path_callback(self, msg):
         folder_path = msg.data
@@ -36,13 +40,7 @@ class MyNode(Node):
             app.config['folder_path'] = folder_path  # Store folder path in Flask app config
             app.run(host='0.0.0.0', port=8000)
             
-#     def location_callback(self, msg):
-#         location = msg.data
-#         self.get_logger().info(f"Received location: {location}")
-#         if location == 'manhole':
-#             # Connect to WiFi (replace 'your_ssid' and 'your_password' with actual values)
-#             subprocess.run(['sudo', 'nmcli', 'd', 'wifi', 'connect', 'Hina Nasir GP', 'password', 'hinahina'])
-#             
+     
 
 @app.route('/')
 def serve_index():
@@ -53,6 +51,20 @@ def serve_index():
 def download_file(filename):
     folder_path = app.config.get('folder_path', '/home/pi/Documents/wifi_data') #default folder ppath
     return send_from_directory(folder_path, filename, as_attachment=True)
+
+@app.route('/delete/<filename>')
+def delete_file(filename):
+    folder_path = app.config.get('folder_path', '')
+    file_path = os.path.join(folder_path, filename)
+
+    if os.path.exists(file_path):
+        os.remove(file_path)
+        # After deleting the file, update the file list
+        files = os.listdir(folder_path)
+        app.config['files'] = files
+
+    return redirect(url_for('serve_index'))
+
 
 def main(args=None):
     rclpy.init(args=args)
