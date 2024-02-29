@@ -1,5 +1,5 @@
 **Overview**
-This lora_communications contains a ROS2 node designed to facilitate communication over LoRa 868 MHz. The node subscribes to various pieces of information, including sensor data, battery status, and blockage information. This information is then transmitted to a ground station. The LoRa communication is established using a Pycom LoPy4 device connected to a Raspberry Pi 4 via a USB port.
+This lora_communications contains a ROS2 node designed to facilitate communication over LoRa 868 MHz and WiFi. The node subscribes to various pieces of information, including sensor data, and diagnostic information. This information is then transmitted to a ground station. The LoRa communication is established using a Pycom LoPy4 device connected to a Raspberry Pi 4 via a USB port.
 
 **Requirements**
 To set up the communication system, you will need the following hardware components:
